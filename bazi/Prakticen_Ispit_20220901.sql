@@ -4,7 +4,7 @@ SELECT klient_id,
 		   sum (broj_smetki_ovlasteni_lica) AS broj_smetki_ovlasteni_lica
 FROM
 (
--- broj_smetki_sopstvenik
+-- broj smetki vo bankata za koi klientot e sopstvenik
     SELECT -- s.smetka_br,
            k.klient_id,
            b.banka_id,
@@ -17,7 +17,7 @@ FROM
             ON b.banka_id = s.banka_id
 			GROUP BY k.klient_id, b.banka_id
     UNION
-	-- broj_smetki_ovlasteni_lica
+	-- broj smetki vo bankata za koi klientot e edno od ovlastenite lice
     SELECT -- s.smetka_br,
            k.klient_id,
            b.banka_id,
@@ -33,7 +33,7 @@ FROM
 			GROUP BY k.klient_id, b.banka_id
 ) t
 WHERE klient_id = 5
-GROUP BY klient_id, banka_id, broj_smetki_sopstvenik
+GROUP BY klient_id, banka_id, broj_smetki_sopstvenik, broj_smetki_ovlasteni_lica 
 ORDER BY klient_id
 
 
