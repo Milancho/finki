@@ -18,7 +18,7 @@ FROM
                     ON s1.smetka_br = t1.smetka_br
             WHERE s1.klient_id = k.klient_id
                   AND s1.banka_id = b.banka_id
-                  AND MONTH(t1.datum) IN ( 1, 2, 3, 4 ) -- 1-vo tromesecje bilo koja godina
+                  AND MONTH(t1.datum) IN ( 1, 2, 3 ) -- 1-vo tromesecje bilo koja godina
         ) AS broj_transakcii_prvo_tromesecje
     FROM dbo.smetki s
         JOIN dbo.klienti k
@@ -43,7 +43,7 @@ FROM
                     ON s1.smetka_br = ol1.smetka_br
             WHERE ol1.klient_id = k.klient_id
                   AND s1.banka_id = b.banka_id
-                  AND MONTH(t1.datum) IN ( 1, 2, 3, 4 ) -- 1-vo tromesecje bilo koja godina
+                  AND MONTH(t1.datum) IN ( 1, 2, 3 ) -- 1-vo tromesecje bilo koja godina
         ) AS broj_transakcii_prvo_tromesecje
     FROM dbo.ovlasteni_lica os
         JOIN dbo.smetki s
