@@ -1,4 +1,6 @@
-[]
+- [Finki](#finki)
+  - [Bazi](#bazi)
+  
 # Finki
 
 ## Bazi
