@@ -4,7 +4,7 @@ Table of contents
 <!--ts-->
 - [Finki](#finki)
   - [Bazi](#bazi)
-  - [Prakticen Ispit](#prakticen-ispit)
+     - [Prakticen Ispit](#prakticen-ispit)
 
 # Finki
 ## Bazi
