@@ -1,8 +1,7 @@
-# Finki
-
 - [Finki](#finki)
   - [Bazi](#bazi)
 
+# Finki
 ## Bazi
 
 ![Image-1](./bazi/IMG-e306cd9061f82c48c7ee9bc263166bf7-V.jpg)
