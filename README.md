@@ -1,7 +1,7 @@
+# Finki
+
 - [Finki](#finki)
   - [Bazi](#bazi)
-  
-# Finki
 
 ## Bazi
 
