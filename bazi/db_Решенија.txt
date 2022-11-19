@@ -1,0 +1,553 @@
+ЗАДАЧА 1:
+
+select b.b_naziv, g.godina,
+	
+	coalesce((select count(distinct s.smetka_br)
+			 from smetki s
+			 where b.banka_id = s.banka_id
+	),0) as vkupen_broj_smetki,
+	
+	coalesce((select count(distinct t.trans_br || '-' || t.smetka_br)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 where extract(quarter from t.datum)=1
+			 	and extract(year from t.datum)=g.godina
+			 	and b.banka_id = s.banka_id
+	),0) as br_trans_trim_1,
+	
+	coalesce((select count(distinct t.trans_br || '-' || t.smetka_br)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 where extract(quarter from t.datum)=2
+			 	and extract(year from t.datum)=g.godina
+			 	and b.banka_id = s.banka_id
+	),0) as br_trans_trim_2,
+	
+	coalesce((select count(distinct t.trans_br || '-' || t.smetka_br)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 where extract(quarter from t.datum)=3
+			 	and extract(year from t.datum)=g.godina
+			 	and b.banka_id = s.banka_id
+	),0) as br_trans_trim_3,
+	
+	coalesce((select count(distinct t.trans_br || '-' || t.smetka_br)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 where extract(quarter from t.datum)=4
+			 	and extract(year from t.datum)=g.godina
+			 	and b.banka_id = s.banka_id
+	),0) as br_trans_trim_4,
+	
+	coalesce((select sum(t.iznos)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 where extract(quarter from t.datum)=1
+			 	and extract(year from t.datum)=g.godina
+			 	and b.banka_id = s.banka_id
+	),null) as suma_iznos_trim_1,
+	
+	coalesce((select sum(t.iznos)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 where extract(quarter from t.datum)=2
+			 	and extract(year from t.datum)=g.godina
+			 	and b.banka_id = s.banka_id
+	),null) as suma_iznos_trim_2,
+	
+	coalesce((select sum(t.iznos)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 where extract(quarter from t.datum)=3
+			 	and extract(year from t.datum)=g.godina
+			 	and b.banka_id = s.banka_id
+	),null) as suma_iznos_trim_3,
+	
+	coalesce((select sum(t.iznos)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 where extract(quarter from t.datum)=4
+			 	and extract(year from t.datum)=g.godina
+			 	and b.banka_id = s.banka_id
+	),null) as suma_iznos_trim_4
+
+from banki b,
+
+	(select distinct extract(year from t.datum) godina
+		from transakcii t) as g
+
+______________________________________________________________________________________
+
+ЗАДАЧА 2:
+select k.k_ime, k.k_embg, g.godina,
+
+	coalesce((select count(distinct t.trans_br || '-' || t.smetka_br)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 where extract(quarter from t.datum)=1
+			 	and extract(year from t.datum)=g.godina
+			 	and k.klient_id = s.klient_id
+	),0) as br_trans_trim_1,
+	
+	coalesce((select count(distinct t.trans_br || '-' || t.smetka_br)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 where extract(quarter from t.datum)=2
+			 	and extract(year from t.datum)=g.godina
+			 	and k.klient_id = s.klient_id
+	),0) as br_trans_trim_2,
+	
+	coalesce((select count(distinct t.trans_br || '-' || t.smetka_br)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 where extract(quarter from t.datum)=3
+			 	and extract(year from t.datum)=g.godina
+			 	and k.klient_id = s.klient_id
+	),0) as br_trans_trim_3,
+	
+	coalesce((select count(distinct t.trans_br || '-' || t.smetka_br)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 where extract(quarter from t.datum)=4
+			 	and extract(year from t.datum)=g.godina
+			 	and k.klient_id = s.klient_id
+	),0) as br_trans_trim_4,
+	
+	coalesce((select avg(t.iznos)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 where extract(quarter from t.datum)=1
+			 	and extract(year from t.datum)=g.godina
+			 	and k.klient_id = s.klient_id
+	),null) as prosek_iznos_trim_1,
+	
+	coalesce((select avg(t.iznos)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 where extract(quarter from t.datum)=2
+			 	and extract(year from t.datum)=g.godina
+			 	and k.klient_id = s.klient_id
+	),null) as prosek_iznos_trim_2,
+	
+	coalesce((select avg(t.iznos)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 where extract(quarter from t.datum)=3
+			 	and extract(year from t.datum)=g.godina
+			 	and k.klient_id = s.klient_id
+	),null) as prosek_iznos_trim_3,
+	
+	coalesce((select avg(t.iznos)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 where extract(quarter from t.datum)=4
+			 	and extract(year from t.datum)=g.godina
+			 	and k.klient_id = s.klient_id
+	),null) as prosek_iznos_trim_4
+
+from klienti k,
+
+	(select distinct extract(year from t.datum) as godina
+		from transakcii t) as g
+
+______________________________________________________________________________________
+
+ЗАДАЧА 3:
+select gr.g_naziv as grad, g.godina,
+
+	coalesce((select count(distinct t.trans_br || '-' || t.smetka_br)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 join klienti k on k.klient_id = s.klient_id
+			 where extract(quarter from t.datum)=1
+			  	and extract(year from t.datum)=g.godina
+			 	and gr.grad_id = k.grad_id
+	),0) as br_trans_trim_1,
+	
+	coalesce((select count(distinct t.trans_br || '-' || t.smetka_br)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 join klienti k on k.klient_id = s.klient_id
+			 where extract(quarter from t.datum)=2
+			  	and extract(year from t.datum)=g.godina
+			 	and gr.grad_id = k.grad_id
+	),0) as br_trans_trim_2,
+	
+	coalesce((select count(distinct t.trans_br || '-' || t.smetka_br)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 join klienti k on k.klient_id = s.klient_id
+			 where extract(quarter from t.datum)=3
+			  	and extract(year from t.datum)=g.godina
+			 	and gr.grad_id = k.grad_id
+	),0) as br_trans_trim_3,
+	
+	coalesce((select count(distinct t.trans_br || '-' || t.smetka_br)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 join klienti k on k.klient_id = s.klient_id
+			 where extract(quarter from t.datum)=4
+			  	and extract(year from t.datum)=g.godina
+			 	and gr.grad_id = k.grad_id
+	),0) as br_trans_trim_4,
+	
+	coalesce((select sum(t.iznos)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 join klienti k on k.klient_id = s.klient_id
+			 where extract(quarter from t.datum)=1
+			  	and extract(year from t.datum)=g.godina
+			 	and gr.grad_id = k.grad_id
+	),null) as suma_iznos_trim_1,
+	
+	coalesce((select sum(t.iznos)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 join klienti k on k.klient_id = s.klient_id
+			 where extract(quarter from t.datum)=2
+			  	and extract(year from t.datum)=g.godina
+			 	and gr.grad_id = k.grad_id
+	),null) as suma_iznos_trim_2,
+	
+	coalesce((select sum(t.iznos)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 join klienti k on k.klient_id = s.klient_id
+			 where extract(quarter from t.datum)=3
+			  	and extract(year from t.datum)=g.godina
+			 	and gr.grad_id = k.grad_id
+	),null) as suma_iznos_trim_3,
+	
+	coalesce((select sum(t.iznos)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 join klienti k on k.klient_id = s.klient_id
+			 where extract(quarter from t.datum)=4
+			  	and extract(year from t.datum)=g.godina
+			 	and gr.grad_id = k.grad_id
+	),null) as suma_iznos_trim_4
+
+from gradovi gr,
+
+	(select distinct extract(year from t.datum) as godina
+		from transakcii t) as g
+
+______________________________________________________________________________________
+
+ЗАДАЧА 4:
+select vr.v_ime, vr.v_embg, vr.b_naziv, vr.godina,
+
+	coalesce((select count(distinct t.trans_br || '-' || t.smetka_br)
+			 from transakcii t
+			 join odgovorni_lica ol on t.trans_br = ol.trans_br
+			 	and t.smetka_br = ol.smetka_br
+			 join vraboteni v on ol.banka_id = v.banka_id
+			 	and ol.vrab_br = v.vrab_br
+			 where extract(quarter from t.datum)=1
+			 	and extract(year from t.datum)=vr.godina
+			 	and vr.vrab_br = v.vrab_br
+			 	and vr.banka_id = v.banka_id
+	),0) as br_trans_trom_1,
+	
+	coalesce((select count(distinct t.trans_br || '-' || t.smetka_br)
+			 from transakcii t
+			 join odgovorni_lica ol on t.trans_br = ol.trans_br
+			 	and t.smetka_br = ol.smetka_br
+			 join vraboteni v on ol.banka_id = v.banka_id
+			 	and ol.vrab_br = v.vrab_br
+			 where extract(quarter from t.datum)=2
+			 	and extract(year from t.datum)=vr.godina
+			 	and vr.vrab_br = v.vrab_br
+			 	and vr.banka_id = v.banka_id
+	),0) as br_trans_trom_2,
+	
+	coalesce((select count(distinct t.trans_br || '-' || t.smetka_br)
+			 from transakcii t
+			 join odgovorni_lica ol on t.trans_br = ol.trans_br
+			 	and t.smetka_br = ol.smetka_br
+			 join vraboteni v on ol.banka_id = v.banka_id
+			 	and ol.vrab_br = v.vrab_br
+			 where extract(quarter from t.datum)=3
+			 	and extract(year from t.datum)=vr.godina
+			 	and vr.vrab_br = v.vrab_br
+			 	and vr.banka_id = v.banka_id
+	),0) as br_trans_trom_3,
+	
+	coalesce((select count(distinct t.trans_br || '-' || t.smetka_br)
+			 from transakcii t
+			 join odgovorni_lica ol on t.trans_br = ol.trans_br
+			 	and t.smetka_br = ol.smetka_br
+			 join vraboteni v on ol.banka_id = v.banka_id
+			 	and ol.vrab_br = v.vrab_br
+			 where extract(quarter from t.datum)=4
+			 	and extract(year from t.datum)=vr.godina
+			 	and vr.vrab_br = v.vrab_br
+			 	and vr.banka_id = v.banka_id
+	),0) as br_trans_trom_4,
+	
+	coalesce((select sum(t.iznos)
+			 from transakcii t
+			 join odgovorni_lica ol on t.trans_br = ol.trans_br
+			 	and t.smetka_br = ol.smetka_br
+			 join vraboteni v on ol.banka_id = v.banka_id
+			 	and ol.vrab_br = v.vrab_br
+			 where extract(quarter from t.datum)=1
+			 	and extract(year from t.datum)=vr.godina
+			 	and vr.vrab_br = v.vrab_br
+			 	and vr.banka_id = v.banka_id
+	),null) as suma_iznos_trom_1,
+	
+	coalesce((select sum(t.iznos)
+			 from transakcii t
+			 join odgovorni_lica ol on t.trans_br = ol.trans_br
+			 	and t.smetka_br = ol.smetka_br
+			 join vraboteni v on ol.banka_id = v.banka_id
+			 	and ol.vrab_br = v.vrab_br
+			 where extract(quarter from t.datum)=2
+			 	and extract(year from t.datum)=vr.godina
+			 	and vr.vrab_br = v.vrab_br
+			 	and vr.banka_id = v.banka_id
+	),null) as suma_iznos_trom_2,
+	
+	coalesce((select sum(t.iznos)
+			 from transakcii t
+			 join odgovorni_lica ol on t.trans_br = ol.trans_br
+			 	and t.smetka_br = ol.smetka_br
+			 join vraboteni v on ol.banka_id = v.banka_id
+			 	and ol.vrab_br = v.vrab_br
+			 where extract(quarter from t.datum)=3
+			 	and extract(year from t.datum)=vr.godina
+			 	and vr.vrab_br = v.vrab_br
+			 	and vr.banka_id = v.banka_id
+	),null) as suma_iznos_trom_3,
+	
+	coalesce((select sum(t.iznos)
+			 from transakcii t
+			 join odgovorni_lica ol on t.trans_br = ol.trans_br
+			 	and t.smetka_br = ol.smetka_br
+			 join vraboteni v on ol.banka_id = v.banka_id
+			 	and ol.vrab_br = v.vrab_br
+			 where extract(quarter from t.datum)=4
+			 	and extract(year from t.datum)=vr.godina
+			 	and vr.vrab_br = v.vrab_br
+			 	and vr.banka_id = v.banka_id
+	),null) as suma_iznos_trom_4
+
+from (
+  
+	select * from (
+		  select v.vrab_br, v.banka_id, v.v_ime, v.v_embg, b.b_naziv
+	  		from vraboteni v
+	  		join banki b on v.banka_id = b.banka_id
+	) vrabBanka,
+  	(select extract (year from t.datum) as godina
+	 from vraboteni v
+	 join odgovorni_lica ol on v.banka_id = ol.banka_id
+	 	and v.vrab_br = ol.vrab_br
+	 join transakcii t on ol.smetka_br = t.smetka_br
+	 	and ol.trans_br = t.trans_br
+	) godini
+) vr
+
+______________________________________________________________________________________
+
+ЗАДАЧА 5:
+
+select b.b_naziv, g.g_naziv,
+
+	coalesce((select count(distinct s.smetka_br)
+			 from smetki s
+			 join klienti k on s.klient_id = k.klient_id
+			 where s.banka_id = b.banka_id
+			 	and k.grad_id = g.grad_id
+	),0) as broj_smetki,
+	
+	coalesce((select count(distinct t.trans_br || '-' || t.smetka_br)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 join klienti k on s.klient_id = k.klient_id
+			 where extract(quarter from t.datum)=1
+			 	and s.banka_id = b.banka_id
+			 	and k.grad_id = g.grad_id
+	),0) as br_trans_trom_1,
+	
+	coalesce((select count(distinct t.trans_br || '-' || t.smetka_br)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 join klienti k on s.klient_id = k.klient_id
+			 where extract(quarter from t.datum)=2
+			 	and s.banka_id = b.banka_id
+			 	and k.grad_id = g.grad_id
+	),0) as br_trans_trom_2,
+	
+	coalesce((select count(distinct t.trans_br || '-' || t.smetka_br)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 join klienti k on s.klient_id = k.klient_id
+			 where extract(quarter from t.datum)=3
+			 	and s.banka_id = b.banka_id
+			 	and k.grad_id = g.grad_id
+	),0) as br_trans_trom_3,
+	
+	coalesce((select count(distinct t.trans_br || '-' || t.smetka_br)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 join klienti k on s.klient_id = k.klient_id
+			 where extract(quarter from t.datum)=4
+			 	and s.banka_id = b.banka_id
+			 	and k.grad_id = g.grad_id
+	),0) as br_trans_trom_4,
+	
+	coalesce((select sum(t.iznos)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 join klienti k on s.klient_id = k.klient_id
+			 where extract(quarter from t.datum)=1
+			 	and s.banka_id = b.banka_id
+			 	and k.grad_id = g.grad_id
+	),null) as suma_iznos_trom_1,
+	
+	coalesce((select sum(t.iznos)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 join klienti k on s.klient_id = k.klient_id
+			 where extract(quarter from t.datum)=2
+			 	and s.banka_id = b.banka_id
+			 	and k.grad_id = g.grad_id
+	),null) as suma_iznos_trom_2,
+	
+	coalesce((select sum(t.iznos)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 join klienti k on s.klient_id = k.klient_id
+			 where extract(quarter from t.datum)=3
+			 	and s.banka_id = b.banka_id
+			 	and k.grad_id = g.grad_id
+	),null) as suma_iznos_trom_3,
+	
+	coalesce((select sum(t.iznos)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 join klienti k on s.klient_id = k.klient_id
+			 where extract(quarter from t.datum)=4
+			 	and s.banka_id = b.banka_id
+			 	and k.grad_id = g.grad_id
+	),null) as suma_iznos_trom_4
+
+from banki b,
+	
+	(select g.grad_id, g.g_naziv
+		from gradovi g
+		join banki b on g.grad_id = b.grad_id) as g
+
+______________________________________________________________________________________
+
+ЗАДАЧА 6:
+select k.k_ime, k.k_embg, g.g_naziv,
+
+	coalesce((select count(s.smetka_br)
+			 from smetki s
+			 join banki b on s.banka_id = b.banka_id
+			 where g.grad_id = b.grad_id
+			 	and k.klient_id = s.klient_id
+	),0) as broj_smetki_sopstvenik,
+	
+	coalesce((select count(ol.smetka_br)
+			 from smetki s
+			 join banki b on s.banka_id = b.banka_id
+			 join ovlasteni_lica ol on s.smetka_br = ol.smetka_br
+			 	--and s.klient_id = ol.klient_id  
+			 where g.grad_id = b.grad_id
+			 	and k.klient_id = ol.klient_id
+	),0) as broj_smetki_ovlasten,
+	
+	coalesce((select count(distinct t.trans_br || '-' || t.smetka_br)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 join banki b on s.banka_id = b.banka_id
+			 where extract(quarter from t.datum)=1
+			  	and g.grad_id = b.grad_id
+			 	and k.klient_id = s.klient_id
+	),0) as br_trans_sopstvenik_trom_1,
+	
+	coalesce((select count(distinct t.trans_br || '-' || t.smetka_br)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 join banki b on s.banka_id = b.banka_id
+			 where extract(quarter from t.datum)=2
+			  	and g.grad_id = b.grad_id
+			 	and k.klient_id = s.klient_id
+	),0) as br_trans_sopstvenik_trom_2,
+	
+	coalesce((select count(distinct t.trans_br || '-' || t.smetka_br)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 join banki b on s.banka_id = b.banka_id
+			 where extract(quarter from t.datum)=3
+			  	and g.grad_id = b.grad_id
+			 	and k.klient_id = s.klient_id
+	),0) as br_trans_sopstvenik_trom_3,
+	
+	coalesce((select count(distinct t.trans_br || '-' || t.smetka_br)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 join banki b on s.banka_id = b.banka_id
+			 where extract(quarter from t.datum)=4
+			  	and g.grad_id = b.grad_id
+			 	and k.klient_id = s.klient_id
+	),0) as br_trans_sopstvenik_trom_4,
+	
+	coalesce((select count(distinct t.trans_br || '-' || t.smetka_br)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 join banki b on s.banka_id = b.banka_id
+			 join ovlasteni_lica ol on s.smetka_br = ol.smetka_br
+			 	--and s.klient_id = ol.klient_id
+			 where extract(quarter from t.datum)=1
+			  	and g.grad_id = b.grad_id
+			 	and k.klient_id = ol.klient_id
+	),0) as br_trans_ovlasten_trom_1,
+	
+	coalesce((select count(distinct t.trans_br || '-' || t.smetka_br)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 join banki b on s.banka_id = b.banka_id
+			 join ovlasteni_lica ol on s.smetka_br = ol.smetka_br
+			 	--and s.klient_id = ol.klient_id
+			 where extract(quarter from t.datum)=2
+			  	and g.grad_id = b.grad_id
+			 	and k.klient_id = ol.klient_id
+	),0) as br_trans_ovlasten_trom_2,
+	
+	coalesce((select count(distinct t.trans_br || '-' || t.smetka_br)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 join banki b on s.banka_id = b.banka_id
+			 join ovlasteni_lica ol on s.smetka_br = ol.smetka_br
+			 	--and s.klient_id = ol.klient_id
+			 where extract(quarter from t.datum)=3
+			  	and g.grad_id = b.grad_id
+			 	and k.klient_id = ol.klient_id
+	),0) as br_trans_ovlasten_trom_3,
+	
+	coalesce((select count(distinct t.trans_br || '-' || t.smetka_br)
+			 from transakcii t
+			 join smetki s on t.smetka_br = s.smetka_br
+			 join banki b on s.banka_id = b.banka_id
+			 join ovlasteni_lica ol on s.smetka_br = ol.smetka_br
+			 	--and s.klient_id = ol.klient_id
+			 where extract(quarter from t.datum)=4
+			  	and g.grad_id = b.grad_id
+			 	and k.klient_id = ol.klient_id
+	),0) as br_trans_ovlasten_trom_4
+
+from klienti k,
+
+	(select g.grad_id, g.g_naziv
+		from gradovi g
+		join klienti k on g.grad_id = k.grad_id) as g
+
+______________________________________________________________________________________
+
+ЗАДАЧА 7: (НЕМАМ ТОЧНО РЕШЕНИЕ)
+
